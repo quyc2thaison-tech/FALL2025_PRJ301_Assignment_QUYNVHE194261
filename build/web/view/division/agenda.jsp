@@ -7,45 +7,31 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Agenda</title>
             <style>
-                table {
-                    border-collapse: collapse
-                }
-
-                td,
-                th {
-                    border: 1px solid #888;
-                    padding: 6px 10px;
-                    text-align: center
-                }
-
-                .present {
-                    background: #98d77a
-                }
-
-                .leave {
-                    background: #ef3c32;
-                    color: #fff
-                }
-
-                .name {
-                    text-align: left;
-                    font-weight: 600
-                }
-
-                .toolbar {
-                    margin-bottom: 12px
-                }
+                body { background:#f6f7fb; font-family: Segoe UI, Arial; color:#1e2b4a }
+                .wrap { max-width: 1100px; margin: 5vh auto; padding:0 16px }
+                .toolbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px }
+                .btn { background:#4b79d8; color:#fff; border:0; padding:8px 14px; border-radius:8px; text-decoration:none }
+                .card { background:#fff; border:1px solid #e4e7f1; border-radius:12px; box-shadow:0 10px 30px rgba(22,34,80,.08); padding:16px }
+                table { width:100%; border-collapse: collapse }
+                td, th { border: 1px solid #e6e9f3; padding: 8px 10px; text-align: center }
+                th { background:#f3f5fb; position:sticky; top:0; z-index:2 }
+                .present { background: #98d77a }
+                .leave { background: #ef3c32; color:#fff }
+                .name { text-align:left; font-weight:600 }
             </style>
         </head>
 
         <body>
-            <div class="toolbar">
-                <form method="get" action="${pageContext.request.contextPath}/division/agenda">
-                    Từ: <input type="date" name="from" value="${param.from}" />
-                    Tới: <input type="date" name="to" value="${param.to}" />
-                    <button type="submit">Xem</button>
-                </form>
-            </div>
+            <div class="wrap">
+                <div class="card">
+                    <div class="toolbar">
+                        <h2>Agenda nhân sự</h2>
+                        <form method="get" action="${pageContext.request.contextPath}/division/agenda">
+                            Từ: <input type="date" name="from" value="${param.from}" />
+                            Tới: <input type="date" name="to" value="${param.to}" />
+                            <button class="btn" type="submit">Xem</button>
+                        </form>
+                    </div>
 
             <table>
                 <tr>
@@ -71,6 +57,8 @@
                     </tr>
                 </c:forEach>
             </table>
+                </div>
+            </div>
         </body>
 
         </html>
