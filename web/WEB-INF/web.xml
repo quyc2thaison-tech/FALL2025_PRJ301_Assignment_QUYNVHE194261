@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+    <display-name>FALL2025_Assignment</display-name>
+
+    <!-- Root URL will be handled by RootRedirectController -->
+    <!-- Explicit servlet mapping to ensure root URL is handled by RootRedirectController -->
+    <servlet>
+        <servlet-name>RootRedirectController</servlet-name>
+        <servlet-class>controller.RootRedirectController</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RootRedirectController</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+</web-app>

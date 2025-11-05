@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.iam.User;
 
@@ -25,6 +26,8 @@ public class HomeController extends BaseRequiredAuthenticationController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
+        req.setAttribute("user", user);
+        req.getRequestDispatcher("view/home.jsp").forward(req, resp);
     }
     
 }

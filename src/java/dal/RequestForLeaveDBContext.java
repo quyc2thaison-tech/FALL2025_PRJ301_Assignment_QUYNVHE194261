@@ -49,6 +49,7 @@ public class RequestForLeaveDBContext extends DBContext<RequestForLeave> {
             {
                 RequestForLeave rfl = new RequestForLeave();
                 
+                rfl.setId(rs.getInt("rid"));
                 rfl.setCreated_time(rs.getTimestamp("created_time"));
                 rfl.setFrom(rs.getDate("from"));
                 rfl.setTo(rs.getDate("to"));
