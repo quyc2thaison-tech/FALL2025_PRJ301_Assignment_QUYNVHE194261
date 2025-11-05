@@ -38,7 +38,11 @@ public class ReviewController extends BaseRequiredAuthorizationController {
             }
         }
         if (!inScope) {
-            resp.getWriter().println("access denied!");
+            String back = req.getHeader("Referer");
+            if (back == null || back.isEmpty())
+                back = req.getContextPath() + "/request/list";
+            req.setAttribute("backUrl", back);
+            req.getRequestDispatcher("../view/auth/denied.jsp").forward(req, resp);
             return;
         }
 
@@ -75,7 +79,11 @@ public class ReviewController extends BaseRequiredAuthorizationController {
             }
         }
         if (!inScope) {
-            resp.getWriter().println("access denied!");
+            String back = req.getHeader("Referer");
+            if (back == null || back.isEmpty())
+                back = req.getContextPath() + "/request/list";
+            req.setAttribute("backUrl", back);
+            req.getRequestDispatcher("../view/auth/denied.jsp").forward(req, resp);
             return;
         }
 
