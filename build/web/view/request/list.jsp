@@ -40,15 +40,15 @@
                         <c:if test="${r.processed_by ne null}">
                             ${r.processed_by.name}, you can change it to
                             <c:if test="${r.status eq 1}">
-                            <a href="review">Rejected</a>
+                            <a href="review?rid=${r.id}">Rejected</a>
                             </c:if>
                              <c:if test="${r.status eq 2}">
-                            <a href="review">Approved</a>
+                            <a href="review?rid=${r.id}">Approved</a>
                             </c:if>
                         </c:if>
                         <c:if test="${r.processed_by eq null}">
-                            <a href="review">Approve</a>
-                            <a href="review">Reject</a>
+                            <a href="review?rid=${r.id}">Approve</a>
+                            <a href="review?rid=${r.id}">Reject</a>
                         </c:if>
                     </td>
                 </tr>

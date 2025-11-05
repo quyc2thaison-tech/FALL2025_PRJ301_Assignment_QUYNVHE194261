@@ -89,7 +89,45 @@ public class RequestForLeaveDBContext extends DBContext<RequestForLeave> {
 
     @Override
     public RequestForLeave get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String sql = "SELECT r.[rid], r.[created_by], e.ename as created_name, r.[created_time],"
+                    + " r.[from], r.[to], r.[reason], r.[status], r.[processed_by], p.ename as processed_name"
+                    + " FROM RequestForLeave r"
+                    + " JOIN Employee e ON e.eid = r.created_by"
+                    + " LEFT JOIN Employee p ON p.eid = r.processed_by"
+                    + " WHERE r.rid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                RequestForLeave rfl = new RequestForLeave();
+                rfl.setId(rs.getInt("rid"));
+                rfl.setCreated_time(rs.getTimestamp("created_time"));
+                rfl.setFrom(rs.getDate("from"));
+                rfl.setTo(rs.getDate("to"));
+                rfl.setReason(rs.getString("reason"));
+                rfl.setStatus(rs.getInt("status"));
+
+                Employee created_by = new Employee();
+                created_by.setId(rs.getInt("created_by"));
+                created_by.setName(rs.getString("created_name"));
+                rfl.setCreated_by(created_by);
+
+                int processed_by_id = rs.getInt("processed_by");
+                if (processed_by_id != 0) {
+                    Employee processed_by = new Employee();
+                    processed_by.setId(processed_by_id);
+                    processed_by.setName(rs.getString("processed_name"));
+                    rfl.setProcessed_by(processed_by);
+                }
+                return rfl;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestForLeaveDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
+        }
+        return null;
     }
 
     @Override
@@ -120,7 +158,22 @@ public class RequestForLeaveDBContext extends DBContext<RequestForLeave> {
 
     @Override
     public void update(RequestForLeave model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            String sql = "UPDATE RequestForLeave SET status = ?, processed_by = ? WHERE rid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, model.getStatus());
+            if (model.getProcessed_by() != null) {
+                stm.setInt(2, model.getProcessed_by().getId());
+            } else {
+                stm.setNull(2, Types.INTEGER);
+            }
+            stm.setInt(3, model.getId());
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestForLeaveDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
+        }
     }
 
     @Override
