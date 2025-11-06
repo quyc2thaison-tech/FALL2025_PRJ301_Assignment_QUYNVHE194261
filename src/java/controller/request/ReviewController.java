@@ -26,13 +26,15 @@ public class ReviewController extends BaseRequiredAuthorizationController {
         String action = req.getParameter("action"); // approve | reject
         int rid = Integer.parseInt(ridRaw);
 
-        // authorization: only superiors of the creator may review
+        // Cho phép 3 user đặc biệt tự review đơn của mình
+        String username = user.getUsername();
+        boolean isDivisionLeader = username.equals("giang") || username.equals("trung") || username.equals("toan");
+
         dal.RequestForLeaveDBContext dbCheck = new dal.RequestForLeaveDBContext();
-        java.util.ArrayList<model.RequestForLeave> scope = dbCheck
-                .getByEmployeeAndSubodiaries(user.getEmployee().getId());
+        java.util.ArrayList<model.RequestForLeave> scope = dbCheck.getByEmployeeAndSubodiaries(user.getEmployee().getId());
         boolean inScope = false;
         for (model.RequestForLeave x : scope) {
-            if (x.getId() == rid && x.getCreated_by().getId() != user.getEmployee().getId()) {
+            if (x.getId() == rid && (x.getCreated_by().getId() != user.getEmployee().getId() || isDivisionLeader)) {
                 inScope = true;
                 break;
             }
@@ -67,13 +69,15 @@ public class ReviewController extends BaseRequiredAuthorizationController {
         dal.RequestForLeaveDBContext db = new dal.RequestForLeaveDBContext();
         model.RequestForLeave rfl = db.get(rid);
 
-        // authorization: only superiors of the creator may view review page
+        // Cho phép 3 user đặc biệt tự review đơn của mình
+        String username = user.getUsername();
+        boolean isDivisionLeader = username.equals("giang") || username.equals("trung") || username.equals("toan");
+
         dal.RequestForLeaveDBContext dbCheck = new dal.RequestForLeaveDBContext();
-        java.util.ArrayList<model.RequestForLeave> scope = dbCheck
-                .getByEmployeeAndSubodiaries(user.getEmployee().getId());
+        java.util.ArrayList<model.RequestForLeave> scope = dbCheck.getByEmployeeAndSubodiaries(user.getEmployee().getId());
         boolean inScope = false;
         for (model.RequestForLeave x : scope) {
-            if (x.getId() == rid && x.getCreated_by().getId() != user.getEmployee().getId()) {
+            if (x.getId() == rid && (x.getCreated_by().getId() != user.getEmployee().getId() || isDivisionLeader)) {
                 inScope = true;
                 break;
             }
