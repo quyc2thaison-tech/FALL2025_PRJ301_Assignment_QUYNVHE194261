@@ -178,7 +178,102 @@ public class RequestForLeaveDBContext extends DBContext<RequestForLeave> {
 
     @Override
     public void delete(RequestForLeave model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public ArrayList<RequestForLeave> getByEmployeeAndSubodiariesPaging(int eid, int pageIndex, int pageSize) {
+        ArrayList<RequestForLeave> rfls = new ArrayList<>();
+        try {
+            String sql = """
+                                     WITH Org AS (
+                                     \t-- get current employee - eid = @eid
+                                     \tSELECT *, 0 as lvl FROM Employee e WHERE e.eid = ?
+                                     \t
+                                     \tUNION ALL
+                                     \t-- expand to other subodinaries
+                                     \tSELECT c.*,o.lvl + 1 as lvl FROM Employee c JOIN Org o ON c.supervisorid = o.eid
+                                     )
+                                     SELECT
+                                     \t\t[rid]
+                                     \t  ,[created_by]
+                                     \t  ,e.ename as [created_name]
+                                           ,[created_time]
+                                           ,[from]
+                                           ,[to]
+                                           ,[reason]
+                                           ,[status]
+                                           ,[processed_by]
+                                     \t  ,p.ename as [processed_name]
+                                     FROM [RequestForLeave] r 
+                                     INNER JOIN Employee e ON e.eid = r.created_by
+                                     LEFT JOIN Employee p ON p.eid = r.processed_by
+                                     WHERE r.created_by IN (SELECT eid FROM Org)
+                                     ORDER BY r.created_time DESC
+                                     OFFSET ? ROWS FETCH NEXT ? ROWS ONLY""";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, eid);
+            stm.setInt(2, (pageIndex - 1) * pageSize);
+            stm.setInt(3, pageSize);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()) {
+                RequestForLeave rfl = new RequestForLeave();
+                
+                rfl.setId(rs.getInt("rid"));
+                rfl.setCreated_time(rs.getTimestamp("created_time"));
+                rfl.setFrom(rs.getDate("from"));
+                rfl.setTo(rs.getDate("to"));
+                rfl.setReason(rs.getString("reason"));
+                rfl.setStatus(rs.getInt("status"));
+                
+                Employee created_by = new Employee();
+                created_by.setId(rs.getInt("created_by"));
+                created_by.setName(rs.getString("created_name"));
+                rfl.setCreated_by(created_by);
+                
+                int processed_by_id = rs.getInt("processed_by");
+                if(processed_by_id!=0) {
+                    Employee processed_by = new Employee();
+                    processed_by.setId(rs.getInt("processed_by"));
+                    processed_by.setName(rs.getString("processed_name"));
+                    rfl.setProcessed_by(processed_by);
+                }
+                
+                rfls.add(rfl);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestForLeaveDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
+        }
+        return rfls;
+    }
+
+    public int getTotalRecords(int eid) {
+        try {
+            String sql = """
+                                     WITH Org AS (
+                                     \t-- get current employee - eid = @eid
+                                     \tSELECT *, 0 as lvl FROM Employee e WHERE e.eid = ?
+                                     \t
+                                     \tUNION ALL
+                                     \t-- expand to other subodinaries
+                                     \tSELECT c.*,o.lvl + 1 as lvl FROM Employee c JOIN Org o ON c.supervisorid = o.eid
+                                     )
+                                     SELECT COUNT(*) as total
+                                     FROM [RequestForLeave] r
+                                     WHERE r.created_by IN (SELECT eid FROM Org)""";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, eid);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestForLeaveDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeConnection();
+        }
+        return 0;
     }
 
 }

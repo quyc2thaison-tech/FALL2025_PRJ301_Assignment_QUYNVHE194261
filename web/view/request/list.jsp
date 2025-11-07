@@ -75,6 +75,49 @@
                 </tr>
             </c:forEach>
         </table>
+
+        <!-- Pagination -->
+        <div style="margin-top:24px;text-align:center">
+            <div style="margin-bottom:8px;color:#6b7280">
+                <c:set var="start" value="${(pageIndex-1)*pageSize + 1}" />
+                <c:set var="end" value="${pageIndex*pageSize}" />
+                <c:if test="${end > totalRecords}">
+                    <c:set var="end" value="${totalRecords}" />
+                </c:if>
+                Hiển thị ${start} - ${end} trong tổng số ${totalRecords} đơn
+            </div>
+            <div class="pagination" style="display:flex;gap:8px;justify-content:center;align-items:center">
+                <c:if test="${pageIndex > 1}">
+                    <a href="?page=1" style="padding:6px 12px;border:1px solid #e5e7eb;border-radius:6px;text-decoration:none;color:#374151">&lt;&lt;</a>
+                    <a href="?page=${pageIndex-1}" style="padding:6px 12px;border:1px solid #e5e7eb;border-radius:6px;text-decoration:none;color:#374151">&lt;</a>
+                </c:if>
+                
+                <c:set var="begin" value="${pageIndex-2}" />
+                <c:if test="${begin < 1}">
+                    <c:set var="begin" value="1" />
+                </c:if>
+                <c:set var="end" value="${pageIndex+2}" />
+                <c:if test="${end > totalPages}">
+                    <c:set var="end" value="${totalPages}" />
+                </c:if>
+                
+                <c:forEach begin="${begin}" end="${end}" var="i">
+                    <c:choose>
+                        <c:when test="${i == pageIndex}">
+                            <span style="padding:6px 12px;background:#4b79d8;color:white;border-radius:6px;min-width:20px">${i}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="?page=${i}" style="padding:6px 12px;border:1px solid #e5e7eb;border-radius:6px;text-decoration:none;color:#374151">${i}</a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+
+                <c:if test="${pageIndex < totalPages}">
+                    <a href="?page=${pageIndex+1}" style="padding:6px 12px;border:1px solid #e5e7eb;border-radius:6px;text-decoration:none;color:#374151">&gt;</a>
+                    <a href="?page=${totalPages}" style="padding:6px 12px;border:1px solid #e5e7eb;border-radius:6px;text-decoration:none;color:#374151">&gt;&gt;</a>
+                </c:if>
+            </div>
+        </div>
         </div>
     </body>
 </html>
