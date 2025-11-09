@@ -151,5 +151,5 @@
                 <div class="foot">Need an account? Contact your administrator.</div>
             </main>
         </div>
-    </body>
-</html>
+    <body>
+        <div class="wrap">

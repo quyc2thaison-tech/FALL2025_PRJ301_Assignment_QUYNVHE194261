@@ -23,6 +23,7 @@
         </head>
 
         <body>
+            <jsp:include page="/view/util/header.jsp" />
             <div class="wrap">
                 <div class="card">
                     <h3>Đơn xin nghỉ phép</h3>

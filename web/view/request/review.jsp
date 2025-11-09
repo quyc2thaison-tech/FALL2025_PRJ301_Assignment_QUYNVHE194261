@@ -73,6 +73,7 @@
         </head>
 
         <body>
+            <jsp:include page="/view/util/header.jsp" />
             <div class="wrap">
                 <div class="card">
                     <h3>Duyệt đơn xin nghỉ phép</h3>

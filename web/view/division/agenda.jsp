@@ -22,6 +22,7 @@
         </head>
 
         <body>
+            <jsp:include page="/view/util/header.jsp" />
             <div class="wrap">
                 <div class="card">
                     <div class="toolbar">

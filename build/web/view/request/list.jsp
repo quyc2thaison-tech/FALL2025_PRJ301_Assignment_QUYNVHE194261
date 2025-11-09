@@ -32,10 +32,11 @@
                 <h2>Đơn xin nghỉ phép</h2>
                 <a class="btn" href="${pageContext.request.contextPath}/request/create">Tạo đơn mới</a>
             </div>
+            <jsp:include page="../util/header.jsp" />
             <jsp:include page="../util/greeting.jsp"></jsp:include>
             <table>
                 <tr>
-                    <th>Request ID</th>
+                    <th>STT</th>
                     <th>Người tạo</th>
                     <th>Lý do</th>
                     <th>Từ</th>
@@ -43,9 +44,10 @@
                     <th>Trạng thái</th>
                     <th>Xử lý</th>
                 </tr>
-            <c:forEach items="${requestScope.rfls}" var="r">
+            <c:set var="startIndex" value="${(pageIndex-1)*pageSize}" />
+            <c:forEach items="${requestScope.rfls}" var="r" varStatus="st">
                 <tr>
-                    <td>#${r.id}</td>
+                    <td>${startIndex + st.index + 1}</td>
                     <td>${r.created_by.name}</td>
                     <td>${r.reason}</td>
                     <td>${r.from}</td>

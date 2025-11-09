@@ -167,6 +167,5 @@
                             </section>
                         </main>
                     </div>
-                </body>
-
-                </html>
+                <body>
+                    <div class="wrap">

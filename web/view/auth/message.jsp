@@ -12,6 +12,9 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <span id="message">${requestScope.message}</span>
+        <jsp:include page="/view/util/header.jsp" />
+        <div style="padding:16px">
+            <span id="message">${requestScope.message}</span>
+        </div>
     </body>
 </html>
