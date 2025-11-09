@@ -163,6 +163,16 @@
                                             <a href="request/list" class="btn">Xem danh sách</a>
                                         </div>
                                     </div>
+                                    
+                                    <div class="panel">
+                                        <div>
+                                            <h3>Lịch bộ phận</h3>
+                                            <p>Xem lịch và cuộc họp của phòng bạn.</p>
+                                        </div>
+                                        <div style="text-align:right">
+                                            <a href="division/agenda" class="btn">Xem lịch</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </section>
                         </main>
